@@ -1,5 +1,8 @@
 var KEYS = ['c', 'd', 'e', 'f'];
 var NOTE_DURATION = 1000;
+// I didn't disable noteboxes until the sound ended because the example game didn't, 
+// and it makes sense so that you don't fail just because you clicked too early
+
 
 // NoteBox
 //
@@ -33,7 +36,7 @@ function NoteBox(key, onClick) {
 		boxEl.classList.add('active');
 		setTimeout(function () {
 			playing--
-			if (!playing) {
+			if (!playing) { // !0 === true...
 				boxEl.classList.remove('active');
 			}
 		}, NOTE_DURATION)
@@ -51,7 +54,7 @@ function NoteBox(key, onClick) {
 
 	// Call this NoteBox's clickHandler and play the note.
 	this.clickHandler = function () {
-		if (!enabled) return;
+		if (!enabled) return; // || boxEl.classList.contains("active")) return;
 
 		this.onClick(this.key)
 		this.play()
@@ -66,11 +69,32 @@ function NoteBox(key, onClick) {
 // clicking the corresponding boxes on the page will play the NoteBox's audio.
 // It will also demonstrate programmatically playing notes by calling play directly.
 var notes = {};
+var simonNotes = [];
+var playedNotes = [];
 
 KEYS.forEach(function (key) {
-	notes[key] = new NoteBox(key);
+	notes[key] = new NoteBox(key, handleClick);
 });
 
+/*
 KEYS.concat(KEYS.slice().reverse()).forEach(function(key, i) {
 	setTimeout(notes[key].play.bind(null, key), i * NOTE_DURATION);
 });
+*/
+
+function handleClick(key) {
+    playedNotes.push(key);
+    checkFail();
+}
+
+function checkFail() {
+    if (playedNotes[playedNotes.length - 1] != simonNotes[playedNotes.length - 1]) {
+        fail();
+    }
+}
+
+function fail() {
+    alert("Fail");
+}
+
+setTimeout(notes['c'].play.bind(null, 'c'), NOTE_DURATION);
