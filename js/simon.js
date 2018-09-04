@@ -71,30 +71,89 @@ function NoteBox(key, onClick) {
 var notes = {};
 var simonNotes = [];
 var playedNotes = [];
+var failed = false;
 
 KEYS.forEach(function (key) {
 	notes[key] = new NoteBox(key, handleClick);
 });
 
+// Disables all notes (NoteBox) in notes
+function disableAllNotes() {
+    KEYS.forEach(function (key) {
+        notes[key].disable();
+    });
+}
+
+// Enables all notes (NoteBox) in notes
+function enableAllNotes() {
+    KEYS.forEach(function (key) {
+        notes[key].enable();
+    });
+}
 /*
 KEYS.concat(KEYS.slice().reverse()).forEach(function(key, i) {
 	setTimeout(notes[key].play.bind(null, key), i * NOTE_DURATION);
 });
 */
 
-function handleClick(key) {
-    playedNotes.push(key);
-    checkFail();
+
+function startGame() {
+    initGame()
+    nextSimon()
 }
 
-function checkFail() {
-    if (playedNotes[playedNotes.length - 1] != simonNotes[playedNotes.length - 1]) {
-        fail();
+// Initializes values of the game
+function initGame() {
+    failed = false;
+    simonNotes = [];
+    playedNotes = [];
+}
+
+// Makes simon play
+function nextSimon() {
+    if (simonNotes.length == playedNotes.length) { // if the player has played the same number of notes as simon, and presumably not failed, then reset and add a new simonNote
+        disableAllNotes();
+        playedNotes = [];
+        simonNotes.push(generateKey());
+        playSimonNotes();
+        enableAllNotes();
     }
 }
 
+// returns a random key (String) from KEYS
+function generateKey() {
+    var i = Math.floor(Math.random() * 4);
+    return KEYS[i];
+}
+
+// Plays all the keys (String) in simonNotes, by finding the corresponding note (NoteBox)
+function playSimonNotes() {
+    simonNotes.forEach(function (key, i) {
+        setTimeout(notes[key].play.bind(null,key), i * NOTE_DURATION);
+    })
+}
+
+// Adds a note (String) to playedNotes, checks if the player failed, and, if the player played enough notes, makes it simon's turn
+function handleClick(key) {
+    playedNotes.push(key); // Add a key (String) to the notes the player has played, and check if they failed the game
+    if (!checkFail() && simonNotes.length == playedNotes.length) { // get the next simon if the player hasn't failed, and has played enough notes
+        setTimeout(nextSimon , 2 * NOTE_DURATION); // delay by NOTE_DURATION so the first player note and first simon note don't overlap
+    }
+}
+
+// Check if the player has failed, depending on the last note (String) they played. Returns true if they have failed, false otherwise
+function checkFail() {
+    if (playedNotes[playedNotes.length - 1] != notes[simonNotes[playedNotes.length - 1]].key) { // check if the last note (String) the player played is the same as simon's
+        fail();
+        disableAllNotes();
+        return true;
+    }
+    return false;
+}
+
+// Shows the player that they're a failure
 function fail() {
     alert("Fail");
 }
 
-setTimeout(notes['c'].play.bind(null, 'c'), NOTE_DURATION);
+//setTimeout(notes['c'].play.bind(null, 'c'), NOTE_DURATION);
