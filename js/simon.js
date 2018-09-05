@@ -157,8 +157,18 @@ function checkFail() {
 
 // Shows the player that they're a failure
 function fail() {
-    setTextById("turn", "Fail");
-    alert("Fail");
+    setTextById("turn", "You Died");
+    let youDiedSound = document.getElementById("youDiedSound");
+    youDiedSound.play(); // Play the death sound
+    let youDied = document.getElementById("youDied");
+    youDied.classList.add("fadeIn"); // Make it fade in
+    youDied.style.zIndex = "10"; // Make it appear in front of everything
+    setInterval(function(){
+            let youDied = document.getElementById("youDied");
+            youDied.classList.remove("fadeIn"); // reset it's fade in
+            youDied.style.zIndex = -1; // Make it behind everything
+            
+    }, 8000)
 }
 
 //setTimeout(notes['c'].play.bind(null, 'c'), NOTE_DURATION);
