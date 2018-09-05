@@ -180,7 +180,8 @@ function undie() {
     let youDied = document.getElementById("youDied");
     youDied.classList.remove("fadeIn"); // reset it's fade in
     youDied.style.zIndex = -1; 
-    setTextById("turn", "Reset Game ^")
+    setTextById("turn", "Simon's Turn");
+    startGame();
 }
 
 //setTimeout(notes['c'].play.bind(null, 'c'), NOTE_DURATION);
