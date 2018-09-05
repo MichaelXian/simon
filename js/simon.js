@@ -141,7 +141,6 @@ function playSimonNotes() {
 function handleClick(key) {
     playedNotes.push(key); // Add a key (String) to the notes the player has played, and check if they failed the game
     if (!checkFail() && simonNotes.length == playedNotes.length) { // get the next simon if the player hasn't failed, and has played enough notes
-        alert("didn't fail");
         setTimeout(nextSimon , 2 * NOTE_DURATION); // delay by NOTE_DURATION so the first player note and first simon note don't overlap
     }
 }
