@@ -158,17 +158,29 @@ function checkFail() {
 // Shows the player that they're a failure
 function fail() {
     setTextById("turn", "You Died");
-    let youDiedSound = document.getElementById("youDiedSound");
-    youDiedSound.play(); // Play the death sound
+    document.getElementById("youDiedSound").play(); // Play the death sound
+    die();
+    setInterval(undie, 8000)
+}
+
+
+// Shows the You Died, and blocks the screen
+function die() {
+    document.getElementById("screenBlocker").style.zIndex = 9; // block the screen
     let youDied = document.getElementById("youDied");
     youDied.classList.add("fadeIn"); // Make it fade in
     youDied.style.zIndex = "10"; // Make it appear in front of everything
-    setInterval(function(){
-            let youDied = document.getElementById("youDied");
-            youDied.classList.remove("fadeIn"); // reset it's fade in
-            youDied.style.zIndex = -1; // Make it behind everything
-            
-    }, 8000)
+}
+
+
+
+// Undoes dying; removes the You Died and unblocks the screen
+function undie() {
+    document.getElementById("screenBlocker").style.zIndex = -1;
+    let youDied = document.getElementById("youDied");
+    youDied.classList.remove("fadeIn"); // reset it's fade in
+    youDied.style.zIndex = -1; 
+    setTextById("turn", "Reset Game ^")
 }
 
 //setTimeout(notes['c'].play.bind(null, 'c'), NOTE_DURATION);
