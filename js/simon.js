@@ -98,10 +98,14 @@ KEYS.concat(KEYS.slice().reverse()).forEach(function(key, i) {
 
 
 function startGame() {
+    setTextById("startGame","Reset Game");
     initGame()
     nextSimon()
 }
 
+function setTextById(id, text) {
+    document.getElementById(id).innerHTML = text;
+}
 // Initializes values of the game
 function initGame() {
     failed = false;
@@ -111,13 +115,13 @@ function initGame() {
 
 // Makes simon play
 function nextSimon() {
-    if (simonNotes.length == playedNotes.length) { // if the player has played the same number of notes as simon, and presumably not failed, then reset and add a new simonNote
+        setTextById("turn", "Simon's Turn");
         disableAllNotes();
-        playedNotes = [];
-        simonNotes.push(generateKey());
+        playedNotes = []; // reset played notes
+        simonNotes.push(generateKey()); // add a new note to simon's notes
         playSimonNotes();
-        enableAllNotes();
-    }
+        setTimeout(enableAllNotes, simonNotes.length * NOTE_DURATION);
+        setTimeout(function() {setTextById("turn", "Your Turn");}, simonNotes.length * NOTE_DURATION);
 }
 
 // returns a random key (String) from KEYS
@@ -137,6 +141,7 @@ function playSimonNotes() {
 function handleClick(key) {
     playedNotes.push(key); // Add a key (String) to the notes the player has played, and check if they failed the game
     if (!checkFail() && simonNotes.length == playedNotes.length) { // get the next simon if the player hasn't failed, and has played enough notes
+        alert("didn't fail");
         setTimeout(nextSimon , 2 * NOTE_DURATION); // delay by NOTE_DURATION so the first player note and first simon note don't overlap
     }
 }
@@ -153,6 +158,7 @@ function checkFail() {
 
 // Shows the player that they're a failure
 function fail() {
+    setTextById("turn", "Fail");
     alert("Fail");
 }
 

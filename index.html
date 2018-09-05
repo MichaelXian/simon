@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!-- TODO: Make paths relative to root again after finishing -->
 	<title>Simon</title>
 	<link rel="stylesheet" href="css/simon.css" />
 </head>
@@ -29,13 +28,19 @@
 		<source src="media/f_note.wav" type="audio/wav"></source>
 	</audio>
 	<!-- Note boxes -->
-    <button onClick="startGame()">Start Game</button>
+    <button id="startGame" onClick="startGame()" class="blue">Start Game</button>
+    <br>
+    <br>
+    <h1 id="turn">Click start game ^</h1>
 	<div id="simon">
+        
 		<div id="c" class="note-box" onClick=""></div>
 		<div id="d" class="note-box" onClick=""></div>
 		<div id="e" class="note-box" onClick=""></div>
 		<div id="f" class="note-box" onClick=""></div>
 	</div>
+    <button href="echo.html" class="blue">Echo - Under Construction</button>
+    <button href="https://github.com/MichaelXian/credible-clients" class="blue">Credible clients; Will work on it when I get my macbook fixed</button>
 	<script src="js/echo.js"></script>
 	<script src="js/simon.js"></script>
 </body>
