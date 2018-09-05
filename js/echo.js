@@ -67,8 +67,9 @@ function NoteBox(key, onClick) {
 var notes = {};
 var playedNotes = [];
 var lastClicked = 0;
-var date = new Date();
+
 var DELAY = 2500;
+var LENIANCY = 10;
 
 KEYS.forEach(function (key) {
 	notes[key] = new NoteBox(key, handleClick);
@@ -93,17 +94,20 @@ enableAllNotes();
 
 // Handles the click, resetting time since last click, adding a note to the played notes, and trying to echo in 2.5 seconds
 function handleClick(key) {
-    lastClicked = date.getMilliseconds();
+    lastClicked = getTime()
     playedNotes.push(key); // Add a key (String) to the notes the player has played // get the 
     setTimeout(tryEcho , DELAY); // Try to echo after 2500 milisseconds
 }
 
+// Returns the current unix time
+function getTime() {
+    var date = new Date();
+    return date.getTime();
+}
+
 // If enough time has passed since the last click, then echo, and reset playedNotes, and disables the notesboxes until the echo finishes
 function tryEcho() {
-    console.log("tried");
-    console.log(date.getMilliseconds() - lastClicked);
-    if (date.getMilliseconds() - lastClicked > DELAY) {
-        console.log("success");
+    if (getTime() - lastClicked > DELAY - LENIANCY) {
         disableAllNotes();
         playBackNotes()
         playedNotes = [];
@@ -113,9 +117,7 @@ function tryEcho() {
 
 // Plays back all the notes in playedNotes
 function playBackNotes() {
-    
     playedNotes.forEach(function (key, i) {
-
         setTimeout(notes[key].play.bind(null,key), i * NOTE_DURATION);
     })
 }
